@@ -12,7 +12,7 @@ const routersConfig: Array<RouterConfig> = [
         isLink: false,
         sub: [
             { key: '/admin/article/list', title: '列表', isLink: true },
-            { key: '/admin/article/drafts', title: '草稿箱', isLink: true },
+            { key: '/admin/article/draft', title: '草稿箱', isLink: true },
             { key: '/admin/article/recycle', title: '回收站', isLink: true },
             { key: '/admin/article/write', title: '编写', isLink: true }
         ]
