@@ -47,7 +47,7 @@ const SideCustom: FC = () => {
             mode="inline"
             openKeys={[openKeys]}
             selectedKeys={[selectedKeys]}
-            onClick={menuClick }
+            onClick={menuClick}
             onOpenChange={openMenu}
         >
             {

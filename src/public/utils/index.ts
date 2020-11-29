@@ -41,3 +41,15 @@ export function classNameFormat(obj: Object): string {
 }
 
 export const noop = () => { };
+
+/**
+ * 手机号码中间为****
+ *
+ * @export
+ * @param {string} mobile 手机号
+ * @returns {string} eg: 132****2222
+ */
+export const handleMobile = (mobile: string): string => {
+    const reg = /^(\d{3})\d{4}(\d{4})$/;
+    return mobile.replace(reg, "$1****$2");
+};
