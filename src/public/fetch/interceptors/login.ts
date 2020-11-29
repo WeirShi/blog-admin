@@ -14,7 +14,7 @@ export function requestInterceptor(config: AxiosRequestConfig) {
     CancelToken.cancel();
     cache.clear();
     cookies.remove("token");
-    window.location.href = `//${window.location.host}/admin/login?backUrl=${
+    window.location.href = `//${window.location.host}/login?backUrl=${
       getParamsCode("backUrl")
         ? getParamsCode("backUrl")
         : encodeURIComponent(window.location.href)
@@ -31,7 +31,7 @@ export function responseInterceptor(response: AxiosResponse) {
   ) {
     cookies.remove("token");
     cache.clear();
-    window.location.href = `//${window.location.host}/admin/login?backUrl=${
+    window.location.href = `//${window.location.host}/login?backUrl=${
       getParamsCode("backUrl")
         ? getParamsCode("backUrl")
         : encodeURIComponent(window.location.href)
