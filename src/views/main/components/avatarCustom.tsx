@@ -4,17 +4,17 @@ import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import cache from '@/public/utils/cache';
 import { handleMobile } from '@/public/utils';
 import { UserInfo } from '@/model/api';
+// import LanguageCustom from './languageCustom';
+
 
 const AvatarCustom: FC = () => {
-
     const userInfo = cache.get('userInfo') as UserInfo;
 
     const changeNickName = () => {}
     const changeAvatar = () => {}
     const logOut = () => {}
 
-
-    const menu = (
+    const UserMenu = (
         <Menu>
             <Menu.Item>
                 <span onClick={changeNickName}>修改昵称</span>
@@ -27,12 +27,11 @@ const AvatarCustom: FC = () => {
             </Menu.Item>
         </Menu>
     );
-    
 
     return (
         <div className="avatar">
             <Avatar icon={<UserOutlined />} />
-            <Dropdown overlay={menu} trigger={['click']}>
+            <Dropdown overlay={UserMenu}>
                 <span className="nickname"
                     style={{
                         marginLeft: '10px',
@@ -44,6 +43,9 @@ const AvatarCustom: FC = () => {
                     { handleMobile(userInfo && userInfo.mobile) } <DownOutlined />
                 </span>
             </Dropdown>
+
+            {/* change language */}
+            {/* <LanguageCustom /> */}
         </div>
     )
 }

@@ -6,8 +6,8 @@ import { Routes } from '@/routes';
 import BreadcrumbCustom from './components/breadcrumbCustom';
 import SideCustom from './components/sideCustom';
 import AvatarCustom from './components/avatarCustom';
-
 import './index.less';
+
 const { Header, Sider, Content, Footer } = Layout;
 
 const Main: FC = () => {
@@ -39,6 +39,7 @@ const Main: FC = () => {
                         {/* 头像个人信息 */}
                         <AvatarCustom />
                     </div>
+
                 </Header>
                 <Content
                     className="site-layout-background content"

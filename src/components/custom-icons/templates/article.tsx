@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
-const ArticleSVG: FC  = () => (
+const ArticleSvg: FC  = () => (
     <svg
         viewBox="0 0 1024 1024"
-        focusable={false}
+        focusable="false"
         fill="currentColor"
-        aria-hidden={true}
+        aria-hidden="true"
         width="1em"
         height="1em"
     >
@@ -16,5 +16,5 @@ const ArticleSVG: FC  = () => (
     </svg>
 )
 
-export default ArticleSVG;
+export default ArticleSvg;
 

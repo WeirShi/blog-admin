@@ -1,11 +1,14 @@
 import React from 'react';
 import Icon from '@ant-design/icons';
-import ArticleSVG from './templates/article';
-import CategorySVG from './templates/category';
-import UserInfoSVG from './templates/userInfo';
+import ArticleSvg from './templates/article';
+import CategorySvg from './templates/category';
+import UserInfoSvg from './templates/userInfo';
+import LanguageSvg from './templates/language';
 
-export const ArticleIcon: React.FC<{}> = props => <Icon component={ArticleSVG} {...props} />
+export const ArticleIcon: React.FC = props => <Icon component={ArticleSvg} {...props} />
 
-export const CategoryIcon: React.FC<{}> = props => <Icon component={CategorySVG} {...props} />
+export const CategoryIcon: React.FC = props => <Icon component={CategorySvg} {...props} />
 
-export const UserInfoIcon: React.FC<{}> = props => <Icon component={UserInfoSVG} {...props} />
+export const UserInfoIcon: React.FC = props => <Icon component={UserInfoSvg} {...props} />
+
+export const LanguageIcon: React.FC = props => <Icon component={LanguageSvg} {...props} />
