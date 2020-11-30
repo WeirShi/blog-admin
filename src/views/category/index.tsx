@@ -14,7 +14,6 @@ const Category: FC = () => {
     const [total, setTotal] = useState<number>(0);
     const [current, setCurrent] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-
     const [modalOptions, setModalOptions] = useState<ModalOptions>({
         visible: false,
         title: '新增分类',
@@ -23,53 +22,30 @@ const Category: FC = () => {
         id: 0
     });
 
-    const onChange = (page, pageSize) => {
-        setCurrent(page);
-        setPageSize(pageSize);
-    }
-    
-    const deleteData = async ({ id }: CategoyExtends): Promise<void> => {
-        const res = await FetchDeleteCategory({ id });
-        if (res.statusCode === 0) {
-            setCurrent(1);
-            message.success(message);
-        } else {
-            message.error(message);
-        }
-    }
-
-    const editCategory = ({id, name, sort}: CategoyExtends) => {
-        setModalOptions({
-            visible: true,
-            title: '编辑分类',
-            id,
-            name,
-            sort: Number(sort)
+    const fetchData = async () => {
+        setLoading(true);
+        const res = await FetchGetCategoryList({
+            current,
+            pageSize
         });
+        setLoading(false);
+        if (res.statusCode === 0) {
+            setTotal(res.data.total);
+            const list = Object.assign([], res.data.list) as CategoyExtends[];
+            list.forEach((item, index) => {
+                item.key = index;
+            });
+            setList(list);
+        } else {
+            message.error(res.message);
+        }
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const res = await FetchGetCategoryList({
-                current,
-                pageSize
-            });
-            setLoading(false);
-            if (res.statusCode === 0) {
-                setTotal(res.data.total);
-                const list = Object.assign([], res.data.list) as CategoyExtends[];
-                list.forEach((item, index) => {
-                    item.key = index;
-                });
-                console.log('list', list);
-                setList(list);
-            } else {
-                message.error(res.message);
-            }
-        }
         fetchData();
-    }, [current, pageSize]);
+    }, []);
+
+    
 
     const colums = [
         {
@@ -108,9 +84,15 @@ const Category: FC = () => {
             title: "操作",
             key: "action",
             width: "20%",
-            render: (text, record) => (
+            render: (_, record) => (
                 <Space split={<Divider type="vertical" />}>
-                    <span className="a_simulated" onClick={() => {editCategory(record)}}>编辑</span>
+                    <span className="a_simulated" onClick={() => {
+                        showCategory({
+                            id: record.id,
+                            name: record.name,
+                            sort: record.sort
+                        })
+                    }}>编辑</span>
                     <Popconfirm
                         title="确定删除该条数据吗?"
                         icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
@@ -130,7 +112,41 @@ const Category: FC = () => {
             visible
         });
     }
+    
+    // 分页回调
+    const onChange = (page, pageSize) => {
+        setCurrent(page);
+        setPageSize(pageSize);
+    }
+    
+    // 删除数据
+    const deleteData = async ({ id }: CategoyExtends): Promise<void> => {
+        const res = await FetchDeleteCategory({ id });
+        if (res.statusCode === 0) {
+            fetchData();
+            message.success(message);
+        } else {
+            message.error(message);
+        }
+    }
 
+    // 显示弹窗
+    const showCategory = (
+        { id, name, sort }: {
+            id: number;
+            name: string;
+            sort: number;
+        }
+    ) => {
+        setModalOptions({
+            visible: true,
+            title: `${id === 0 ? "新增" : "编辑"}分类`,
+            id,
+            name,
+            sort
+        });
+    }
+    
     return (
         <div className="category">
             <Loading spinning={loading}>
@@ -138,7 +154,15 @@ const Category: FC = () => {
                     ghost={false}
                     title="分类列表"
                     extra={
-                        <Button type="primary" onClick={() => { changeCategoryVisible(true) }}>新增分类</Button>
+                        <Button type="primary"
+                            onClick={() => {
+                                showCategory({
+                                    id: 0,
+                                    name: '',
+                                    sort: 1
+                                })
+                            }}
+                        >新增分类</Button>
                     }
                 />
                 <Table
@@ -154,7 +178,11 @@ const Category: FC = () => {
             </Loading>
 
             {/* 新增弹窗 */}
-            <AddCategoryModal {...modalOptions} cancel={() => { changeCategoryVisible(false) }} />
+            <AddCategoryModal
+                {...modalOptions}
+                cancel={() => { changeCategoryVisible(false) }}
+                confirm={() => { changeCategoryVisible(false); fetchData(); }}
+            />
         </div>
     )
 }

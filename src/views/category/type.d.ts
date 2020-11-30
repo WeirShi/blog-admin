@@ -2,6 +2,6 @@ export type ModalOptions = {
     visible: boolean;
     title: string;
     name: string;
-    sort: number;
+    sort: number | string;
     id: number;
 }
