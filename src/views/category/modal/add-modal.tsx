@@ -10,7 +10,6 @@ type Options = ModalOptions & {
 }
 
 const AddCategoryModal: FC<Options> = props => {
-    // const [form] = Form.useForm();
     const formRef = createRef<FormInstance>();
 
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
