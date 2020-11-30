@@ -47,6 +47,7 @@ type Category = {
     create_time?: string | null;
     update_time?: string | null;
     articles?: Article[];
+    articles_count?: number;
 };
 
 type Tag = {
