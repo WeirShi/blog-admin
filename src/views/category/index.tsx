@@ -47,7 +47,7 @@ const Category: FC = () => {
 
     
 
-    const colums = [
+    const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
@@ -166,7 +166,7 @@ const Category: FC = () => {
                     }
                 />
                 <Table
-                    columns={colums}
+                    columns={columns}
                     dataSource={list}
                     pagination={{
                         current,

@@ -46,7 +46,7 @@ const Tag: FC = () => {
         fetchData();
     }, []);
 
-    const colums = [
+    const columns = [
         {
             title: "ID",
             dataIndex: "id",
@@ -177,7 +177,7 @@ const Tag: FC = () => {
                     }
                 />
                 <Table
-                    columns={colums}
+                    columns={columns}
                     dataSource={list}
                     pagination={{
                         current,
