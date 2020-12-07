@@ -124,9 +124,9 @@ const Category: FC = () => {
         const res = await FetchDeleteCategory({ id });
         if (res.statusCode === 0) {
             fetchData();
-            message.success(message);
+            message.success(res.message);
         } else {
-            message.error(message);
+            message.error(res.message);
         }
     }
 
@@ -177,7 +177,7 @@ const Category: FC = () => {
                 />
             </Loading>
 
-            {/* 新增弹窗 */}
+            {/* 弹窗 */}
             <AddCategoryModal
                 {...modalOptions}
                 cancel={() => { changeCategoryVisible(false) }}

@@ -2,7 +2,9 @@ import React, { FC, useState, useEffect } from 'react';
 import { Table, message, Space, Button, Popconfirm, Divider, PageHeader } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import Loading from '@/components/loading';
-import { FetchGetTagList } from '@/api';
+import AddTagModal from './modal/add-modal';
+import { FetchGetTagList, FetchDeleteTag } from '@/api';
+import { ModalOptions } from './type';
 
 type TagExtends = Tag & { key: number };
 
@@ -12,6 +14,14 @@ const Tag: FC = () => {
     const [total, setTotal] = useState<number>(0);
     const [current, setCurrent] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
+    const [modalOptions, setModalOptions] = useState<ModalOptions>({
+        visible: false,
+        title: '新增标签',
+        name: '',
+        sort: 1,
+        id: 0,
+        color: ''
+    });
 
     const fetchData = async () => {
         setLoading(true);
@@ -83,7 +93,8 @@ const Tag: FC = () => {
                         showTagModal({
                             id: record.id,
                             name: record.name,
-                            sort: record.sort
+                            sort: record.sort,
+                            color: record.color
                         })
                     }}>编辑</span>
                     <Popconfirm
@@ -104,17 +115,65 @@ const Tag: FC = () => {
         setPageSize(pageSize);
     }
 
-    const deleteData = (data) => {}
-    const showTagModal = (data) => {}
+    const deleteData = async ({ id }: TagExtends) => {
+        const res = await FetchDeleteTag({ id });
+        if (res.statusCode === 0) {
+            fetchData();
+            message.success(res.message);
+        } else {
+            message.error(res.message);
+        }
+    }
+    const showTagModal = (
+        { id, name, color, sort }: {
+            id: number;
+            name: string;
+            color: string;
+            sort: number;
+        }
+    ) => {
+        setModalOptions({
+            visible: true,
+            title: `${id === 0 ? "新增" : "编辑"}分类`,
+            id,
+            name,
+            color,
+            sort
+        });
+    }
+
+    const changeTagVisible = (visible: boolean) => {
+        setModalOptions({
+            ...modalOptions,
+            visible
+        })
+    }
+
+    const changeTagColor = (color: string) => {
+        setModalOptions({
+            ...modalOptions,
+            color
+        });
+    }
+
 
     return (
         <div className="tag">
             <Loading spinning={loading}>
                 <PageHeader
                     ghost={false}
-                    title="分类列表"
+                    title="标签列表"
                     extra={
-                        <Button type="primary">新增标签</Button>
+                        <Button type="primary"
+                        onClick={() => {
+                            showTagModal({
+                                id: 0,
+                                name: '',
+                                sort: 1,
+                                color: ''
+                            })
+                        }}
+                        >新增标签</Button>
                     }
                 />
                 <Table
@@ -128,6 +187,15 @@ const Tag: FC = () => {
                     }}
                 />
             </Loading>
+
+            {/* 弹窗 */}
+            <AddTagModal
+                {...modalOptions}
+                cancel={() => { changeTagVisible(false) }}
+                confirm={() => { changeTagVisible(false); fetchData(); }}
+                onColorChange={changeTagColor}
+            />
+
         </div>
     )
 }
