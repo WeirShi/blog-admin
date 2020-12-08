@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Table, Tag, Space, Popconfirm, message } from 'antd';
 import { QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { jElement } from '@/public/utils';
@@ -15,6 +16,7 @@ type Props = {
 };
 
 const CustomTable: FC<Props> = props => {
+    const histroy = useHistory();
     const { type, list, current, pageSize, total, onPaginationChange, onRefresh } = props;
 
 
@@ -63,6 +65,17 @@ const CustomTable: FC<Props> = props => {
         } else {
             message.error(res.message);
         }
+    }
+
+    // 预览文章
+    const previewArticle = (data: Article): void => {
+        console.log('预览文章');
+    }
+
+    // 编辑文章
+    const editArticle = ({ id }: Article): void => {
+        console.log('编辑文章');
+        histroy.push();
     }
 
     const columns = [
@@ -147,8 +160,8 @@ const CustomTable: FC<Props> = props => {
                     {
                         jElement(
                             <>
-                                <span className="a_simulated">预览</span>
-                                <span className="a_simulated">编辑</span>
+                                <span className="a_simulated" onClick={() => { previewArticle(record) }}>预览</span>
+                                <span className="a_simulated" onClick={() => { editArticle(record) }}>编辑</span>
                             </>,
                             type === "list"
                         )

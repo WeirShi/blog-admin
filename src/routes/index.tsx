@@ -5,6 +5,7 @@ import Home from '@/views/home';
 import Category from '@/views/category';
 import Tag from '@/views/tag';
 import ArticleWrite from '@/views/article/write';
+import ArticleEdit from '@/views/article/edit';
 import ArticleList from '@/views/article/list';
 import ArticleDraft from '@/views/article/draft';
 import ArticleRecycle from '@/views/article/recycle';
@@ -18,6 +19,7 @@ export const Routes = () => {
             <Route exact path='/admin/category' component={Category} />
             <Route exact path='/admin/tag' component={Tag} />
             <Route exact path='/admin/article/write' component={ArticleWrite} />
+            <Route exact path='/admin/article/edit/:id' component={ArticleEdit} />
             <Route exact path='/admin/article/list' component={ArticleList} />
             <Route exact path='/admin/article/draft' component={ArticleDraft} />
             <Route exact path='/admin/article/recycle' component={ArticleRecycle} />
