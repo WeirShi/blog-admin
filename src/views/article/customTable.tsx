@@ -68,14 +68,18 @@ const CustomTable: FC<Props> = props => {
     }
 
     // 预览文章
-    const previewArticle = (data: Article): void => {
-        console.log('预览文章');
+    const previewArticle = ({ html_content }: Article): void => {
+        if (html_content.length === 0) {
+            message.error('该文章没有内容~');
+            return;
+        }
+        console.log('预览文章', html_content);
     }
 
     // 编辑文章
     const editArticle = ({ id }: Article): void => {
         console.log('编辑文章');
-        histroy.push();
+        histroy.push(`/admin/article/edit/${id}`);
     }
 
     const columns = [

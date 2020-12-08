@@ -16,12 +16,12 @@ const renderBreadcrumb = (r: string) => {
 
     routersConfig.forEach((route: RouterConfig) => {
         if (route.sub === undefined) {
-            if (route.title !== '首页' && route.key === r) {
+            if (route.title !== '首页' && r.indexOf(route.key) >= 0) {
                 routes.push(route);
             }
         } else {
             route.sub.forEach(item => {
-                if (item.key === r) {
+                if (r.indexOf(item.key) >= 0) {
                     routes.push(route);
                     routes.push(item);
                 }

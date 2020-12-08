@@ -53,3 +53,22 @@ export const handleMobile = (mobile: string): string => {
     const reg = /^(\d{3})\d{4}(\d{4})$/;
     return mobile.replace(reg, "$1****$2");
 };
+
+/**
+ * 扁平化数组、数组对象
+ *
+ * @export
+ * @param {array} array 数组
+ * @param {string} key 数组对象中需要flatten的key值
+ * @returns {array}
+ */
+export const flatten = (array: Array<any>, key?: string) => {
+    return array.reduce((result, item)=> {
+        return result.concat(
+            key 
+                ? (Array.isArray(item[key]) ? flatten(item[key]) : item)
+                : Array.isArray(item) ? flatten(item) : item
+        );
+    }, []);
+}
+

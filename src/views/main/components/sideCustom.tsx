@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Menu } from 'antd';
 import routersConfig from '@/routes/config';
 import { RouterConfig } from '@/routes/type';
+import { jElement, flatten } from '@/public/utils/index';
 
 
 const SideCustom: FC = () => {
@@ -10,17 +11,29 @@ const SideCustom: FC = () => {
     const { pathname } = history.location;
     const [openKeys, setOpenKeys] = useState<string>('');
     const [selectedKeys, setSelectedKeys] = useState<string>('');
-
     useEffect(() => {
-        setOpenKeys(pathname.substr(0, pathname.lastIndexOf('/')));
+        const path = pathname.substr(0, pathname.lastIndexOf('/'));
+        console.log(path);
+        const [router] = (flatten(routersConfig, 'sub').filter( r => r.key === path)) as RouterConfig[];
+        console.log('router', router);
+        if (router?.hidden) {
+            return;
+        }
+        setOpenKeys(path);
         setSelectedKeys(pathname);
     }, [pathname])
 
 
-    const renderMenuItem = ({ key, Icon, title }: RouterConfig) =>
-        <Menu.Item key={key} icon={ Icon && <Icon /> }>
-            {title}
-        </Menu.Item>
+    const renderMenuItem = ({ key, Icon, title, hidden }: RouterConfig) => {
+        return (
+            jElement(
+                <Menu.Item key={key} icon={ Icon && <Icon /> }>
+                    {title}
+                </Menu.Item>,
+                !hidden
+            )
+        )
+    }
 
     const renderSubMenu = ({ key, Icon, title, sub }: RouterConfig) =>
         <Menu.SubMenu
