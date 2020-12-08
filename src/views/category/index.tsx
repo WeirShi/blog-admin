@@ -43,7 +43,7 @@ const Category: FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [current, pageSize]);
 
     
 

@@ -30,11 +30,15 @@ const ArticleRecycle: FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [current, pageSize]);
 
     const onChange = (page: number, pageSize?: number): void => {
         setCurrent(page);
         setPageSize(pageSize);
+    }
+
+    const onRefresh = (): void => {
+        fetchData();
     }
 
     return (
@@ -42,12 +46,13 @@ const ArticleRecycle: FC = () => {
             <Loading spinning={loading}>
                 <PageHeader ghost={false} title="文章回收站" />
                 <CustomTable
-                    type="list"
+                    type="recycle"
                     list={list}
                     current={current}
                     pageSize={pageSize}
                     total={total}
                     onPaginationChange={onChange}
+                    onRefresh={onRefresh}
                 />
             </Loading>
         </div>

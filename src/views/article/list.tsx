@@ -30,11 +30,15 @@ const ArticleList: FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [current, pageSize]);
 
     const onChange = (page: number, pageSize?: number): void => {
         setCurrent(page);
         setPageSize(pageSize);
+    }
+
+    const onRefresh = (): void => {
+        fetchData();
     }
 
     return (
@@ -48,6 +52,7 @@ const ArticleList: FC = () => {
                     pageSize={pageSize}
                     total={total}
                     onPaginationChange={onChange}
+                    onRefresh={onRefresh}
                 />
             </Loading>
         </div>

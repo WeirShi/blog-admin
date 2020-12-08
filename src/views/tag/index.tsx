@@ -44,7 +44,7 @@ const Tag: FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [current, pageSize]);
 
     const columns = [
         {

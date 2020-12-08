@@ -30,11 +30,15 @@ const ArticleDraft: FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [current, pageSize]);
 
     const onChange = (page: number, pageSize?: number): void => {
         setCurrent(page);
         setPageSize(pageSize);
+    }
+
+    const onRefresh = (): void => {
+        fetchData();
     }
 
     return (
@@ -42,12 +46,13 @@ const ArticleDraft: FC = () => {
             <Loading spinning={loading}>
                 <PageHeader ghost={false} title="文章草稿箱" />
                 <CustomTable
-                    type="list"
+                    type="drafts"
                     list={list}
                     current={current}
                     pageSize={pageSize}
                     total={total}
                     onPaginationChange={onChange}
+                    onRefresh={onRefresh}
                 />
             </Loading>
         </div>

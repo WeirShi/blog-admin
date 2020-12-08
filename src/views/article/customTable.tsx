@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Table, Tag, Space, Popconfirm } from 'antd';
+import { Table, Tag, Space, Popconfirm, message } from 'antd';
 import { QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { jElement } from '@/public/utils';
+import { FetchPublishArticle, FetchDeleteArticle, FetchMoveArticleToDrafts, FetchMoveArticleToList } from '@/api';
 
 type Props = {
     type: string;
@@ -10,10 +11,59 @@ type Props = {
     pageSize: number | undefined;
     total: number;
     onPaginationChange: (page, pageSize) => void;
+    onRefresh: () => void;
 };
 
 const CustomTable: FC<Props> = props => {
-    const { type, list, current, pageSize, total, onPaginationChange } = props;
+    const { type, list, current, pageSize, total, onPaginationChange, onRefresh } = props;
+
+
+    // 发布，下架文章
+    const publishArticle = async ({ id, is_publish }: Article): Promise<void> => {
+        const res = await FetchPublishArticle({
+            id,
+            is_publish: is_publish ? 0 : 1
+          });
+          if (res.statusCode === 0) {
+            onRefresh();
+            message.success(res.message);
+          } else {
+            message.error(res.message);
+          }
+    }
+
+    // 删除文章
+    const deleteArticle = async ({ id }: Article): Promise<void> => {
+        const res = await FetchDeleteArticle({ id });
+        if (res.statusCode === 0) {
+            onRefresh();
+            message.success(res.message);
+        } else {
+            message.error(res.message);
+        }
+    }
+
+    // 移动到草稿箱
+    const moveToDrafts = async ({ id }: Article): Promise<void> => {
+        const res = await FetchMoveArticleToDrafts({ id });
+        if (res.statusCode === 0) {
+            message.success(res.message);
+            onRefresh();
+        } else {
+            message.error(res.message);
+        }
+    }
+
+    // 移动到列表
+    const moveToList = async ({ id }: Article): Promise<void> => {
+        const res = await FetchMoveArticleToList({ id });
+        if (res.statusCode === 0) {
+            message.success(res.message);
+            onRefresh();
+        } else {
+            message.error(res.message);
+        }
+    }
 
     const columns = [
         {
@@ -109,6 +159,7 @@ const CustomTable: FC<Props> = props => {
                             <Popconfirm
                                 title="确定发布该文章吗?"
                                 icon={<ExclamationCircleOutlined style={{ color: 'green' }} />}
+                                onConfirm={() => { publishArticle(record) }}
                             >
                                 <span className="a_simulated">发布</span>
                             </Popconfirm>,
@@ -120,6 +171,7 @@ const CustomTable: FC<Props> = props => {
                             <Popconfirm
                                 title="确定下架该文章吗?"
                                 icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                                onConfirm={() => { publishArticle(record) }}
                             >
                                 <span className="a_simulated">下架</span>
                             </Popconfirm>,
@@ -128,13 +180,25 @@ const CustomTable: FC<Props> = props => {
                     }
                     {
                         jElement(
-                            <span className="a_simulated">移动到列表</span>,
+                            <Popconfirm
+                                title="确定移动该条数据到列表吗?"
+                                icon={<ExclamationCircleOutlined style={{ color: 'green' }} />}
+                                onConfirm={() => { moveToList(record) }}
+                            >
+                                <span className="a_simulated">移动到列表</span>
+                            </Popconfirm>,
                             type !== 'list'
                         )
                     }
                     {
                         jElement(
-                            <span className="a_simulated">移动到草稿箱</span>,
+                            <Popconfirm
+                                title="确定移动该条数据到草稿箱吗?"
+                                icon={<ExclamationCircleOutlined style={{ color: 'green' }} />}
+                                onConfirm={() => { moveToDrafts(record) }}
+                            >
+                                <span className="a_simulated">移动到草稿箱</span>
+                            </Popconfirm>,
                             type === 'recycle'
                         )
                     }
@@ -143,6 +207,7 @@ const CustomTable: FC<Props> = props => {
                             <Popconfirm
                                 title="确定删除该条数据吗?"
                                 icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                                onConfirm={() => { deleteArticle(record) }}
                             >
                                 <span className="a_simulated">删除</span>
                             </Popconfirm>,
